@@ -1,0 +1,777 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap');
+
+:root {
+    --wood-color: #7d5a50;
+    --shelf-depth: #4b3621;
+    --bg-color: #f0f0f2;
+}
+
+body {
+    background: radial-gradient(circle at center, #e0d7c6 0%, rgb(114, 98, 64) 100%);
+    background-attachment: fixed; 
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    color: #333;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.2;
+    pointer-events: none;
+    background-image: url('https://www.transparenttextures.com/patterns/p6.png'); 
+}
+
+header {
+    position: relative;
+    padding: 30px 20px 40px 20px; 
+    text-align: center;
+    color: white; 
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+header::before {
+    content: "";
+    position: absolute;
+    top: -5px; left: -5px; right: -5px; bottom: -5px; 
+    background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=1000');
+    background-size: cover;
+    background-position: center;
+    filter: blur(8px) brightness(50%); /* Малко по-тъмно за по-добър контраст */
+    z-index: 1;
+}
+
+.header-content {
+    position: relative;
+    z-index: 2; /* Задължително по-голямо от z-index на фоновия image */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto 30px auto; /* Разстояние до търсачката */
+    max-width: 1200px; /* Увеличаваме общата широчина на хедъра */
+    
+}
+
+header h1, header .controls {
+    position: relative;
+    z-index: 2;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Сянка*/
+}
+
+header h1 {
+    font-size: 4.5rem; /* Значително по-голям размер */
+    font-weight: 800; /* Много плътен шрифт */
+    color: white;
+    margin: 0;
+    letter-spacing: -2px; /* Прибираме буквите малко за модерен Apple-style вид */
+    text-transform: lowercase; /* По желание: iShelf изглежда добре и изцяло с малки букви */
+    
+    /* Сянката е критична, за да изпъкне над снимката */
+    text-shadow: 0 10px 20px rgba(0,0,0,0.4), 
+                 0 4px 6px rgba(0,0,0,0.2);
+    
+    /* Добавяме лек наклон или мащабиране, за да е динамично */
+    transition: transform 0.3s ease;
+    cursor: default;
+}
+header h1 span {
+    color: #ffcc00; 
+    text-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
+}
+
+header h1:hover {
+    transform: scale(1.05); /* Леко пулсиране при посочване */
+}
+
+/* Контейнерът вляво */
+.header-left {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    perspective: 1000px; /* Добавя дълбочина */
+}
+
+/* Ефектът на хартията */
+.papers, .papers:before, .papers:after {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    /* Инсет сянката придава обем на хартията */
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.1), 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+.papers {
+    position: relative;
+    width: 220px; /* Фиксирана широчина за хедъра */
+    padding: 15px;
+    margin: 20px 0; /* Малко разстояние от краищата */
+    z-index: 5; /* Да е над всичко */
+}
+
+.papers:before, .papers:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+/* Ротацията на листите отдолу */
+.papers:before {
+    transform: rotateZ(4deg);
+}
+
+.papers:after {
+    transform: rotateZ(-4deg);
+}
+
+/* Стилизиране на текста вътре в хартията */
+#header-quote {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem; /* Малко по-малък за да се събере */
+    color: #333; /* Тъмен текст за хартията */
+    margin: 0;
+    text-align: left;
+    line-height: 1.4;
+    font-style: italic;
+    text-shadow: none; /* Махаме сянката от хедъра */
+}
+
+#quote-author {
+    display: block;
+    text-align: right;
+    font-size: 0.75rem;
+    color: #777;
+    margin-top: 8px;
+}
+
+.header-right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end; /* Залепено вдясно */
+    align-items: center;
+}
+
+.controls {
+    position: relative;
+    z-index: 2;
+}
+
+.controls input {
+   width: 100%;
+    padding: 12px 45px 12px 20px;
+    font-size: 1rem;
+    border-radius: 25px;
+    border: none;
+    outline: none;
+    box-sizing: border-box; 
+}
+
+.controls button {
+    padding: 10px 20px;
+    background: #ffcc00;
+    color: white;
+    border: black;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+}
+
+
+.search-wrapper {
+    position: relative; 
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto; 
+    display: flex;
+    align-items: center;
+}
+
+.clear-btn {
+   position: absolute;
+    right: 10px; 
+    background: #ffcc00;
+    color: white;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.clear-btn:hover {
+    background: #999;
+}
+
+/* Когато полето има текст показва бутона */
+#searchInput:not(:placeholder-shown) + .clear-btn {
+    display: flex;
+}
+
+
+#library-container {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 0 20px;
+}
+
+/* Рафт */
+.shelf {
+    position: relative;
+    margin-bottom: 80px;
+    filter: drop-shadow(0 20px 10px rgba(0,0,0,0.2));
+}
+
+.book-row {
+    display: flex;
+    gap: 15px;
+    padding: 10px 20px;
+    min-height: 160px;
+    align-items: flex-end;
+    flex-wrap: nowrap; 
+    justify-content: flex-start;
+}
+
+.shelf-board {
+    height: 20px;
+    background: linear-gradient(to bottom, var(--wood-color), var(--shelf-depth));
+    border-radius: 4px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+}
+
+/* Книга */
+/* Контейнер за правилно позициониране на рафта */
+.book-container {
+    position: relative; /* База за бутона */
+    perspective: 1000px;
+    width: 110px;
+    height: 160px;
+}
+
+.book {
+    transform-style: preserve-3d;
+    position: relative;
+    width: 110px;
+    height: 160px;
+    cursor: pointer;
+    transition: transform 0.5s;
+}
+
+/* Общи стилове за корици и страници */
+.front, .back, .page1, .page2, .page3, .page4, .page5, .page6 {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0; left: 0;
+    transform-origin: left center;
+    transition: transform .5s ease-in-out, box-shadow .35s ease-in-out;
+    border-radius: 2px 4px 4px 2px;
+}
+
+.front {
+    background-size: cover;
+    background-position: center;
+    z-index: 10;
+    /* Твоето старо бордо или тъмно синьо, ако няма снимка */
+    background-color: var(--shelf-depth); 
+}
+
+.back {
+    background: var(--shelf-depth);
+    transform: rotateY(0deg);
+}
+
+/* Слоеве на страниците */
+.page1 { background: #efefef; z-index: 9; }
+.page2 { background: #efefef; z-index: 8; }
+.page3 { background: #f5f5f5; z-index: 7; }
+.page4 { background: #f5f5f5; z-index: 6; }
+.page5 { background: #fafafa; z-index: 5; }
+.page6 { background: #fdfdfd; z-index: 4; }
+
+/* АНИМАЦИЯ ПРИ HOVER */
+.book-container:hover .book .front {
+    transform: rotateY(-145deg);
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+}
+
+.book-container:hover .book .page1 { transform: rotateY(-135deg); }
+.book-container:hover .book .page2 { transform: rotateY(-25deg); }
+.book-container:hover .book .page3 { transform: rotateY(-125deg); }
+.book-container:hover .book .page4 { transform: rotateY(-35deg); }
+.book-container:hover .book .page5 { transform: rotateY(-115deg); }
+.book-container:hover .book .page6 { transform: rotateY(-45deg); }
+
+.book-container:hover .book .back {
+    transform: rotateY(-15deg);
+}
+
+/* Поправка за бутона за триене, за да не се върти странно */
+.delete-btn {
+    position: absolute;
+    top: -10px; /* Излиза малко над книгата */
+    right: -10px; /* Излиза малко вдясно */
+    width: 25px;
+    height: 25px;
+    background: #ff4444; /* Червен цвят за яснота */
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 100; /* НАЙ-ВАЖНОТО: да е над всички въртящи се страници */
+    opacity: 0; /* Скриваме го по подразбиране */
+    transition: opacity 0.3s, transform 0.2s;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
+
+/* Статус Прочетена */
+.book.is-read {
+    filter: grayscale(100%) opacity(0.6);
+}
+
+.delete-btn {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 24px;
+    height: 24px;
+    background: #ff3b30; 
+    color: white;
+    border-radius: 50%;
+    border: 2px solid white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0; 
+    transition: opacity 0.2s, transform 0.2s;
+    z-index: 10;
+}
+
+.book-container:hover .delete-btn {
+    opacity: 1;
+}
+
+.delete-btn:hover {
+    background: #cc0000;
+    transform: scale(1.2); /* Леко пулсиране при посочване */
+}
+.no-results {
+    color: #666;
+    font-style: italic;
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 8px;
+}
+
+.results-grid {
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+    padding: 20px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 10px;
+    justify-content: flex-start;
+     max-width: 1000px;
+      margin: 0;
+    flex-wrap: wrap;
+}
+
+.search-item {
+    width: 120px;
+    background: rgba(255, 255, 255, 0.4); 
+    backdrop-filter: blur(5px);
+    padding: 15px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items:flex-start ;
+    transition: transform 0.2s;
+}
+
+.search-item img {
+    width: 90px;
+    height: 130px;
+    object-fit: cover;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    margin-bottom: 12px;
+}
+
+.search-item p {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #444;
+    margin: 0 0 15px 0;
+    line-height: 1.3;
+    
+    height: 3.3em; 
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-align: center;
+}
+
+.search-item button {
+    margin-top: auto; 
+    width: 100%;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 0;
+    border-radius: 20px; 
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+.toast {
+    position: fixed;
+    /* Променяме от bottom на top, за да излиза винаги най-отгоре на екрана */
+    top: 20px; 
+    left: 50%;
+    /* Променяме translateY да идва отгоре (-100px), за да е по-ефектно */
+    transform: translateX(-50%) translateY(-100px); 
+    
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    color: #333;
+    padding: 12px 25px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    border: 1px solid rgba(255,255,255,0.3);
+    font-weight: 600;
+    
+    /* ТОВА Е КЛЮЧЪТ: Трябва да е по-високо от z-index на модала */
+    z-index: 9999; 
+    
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: none; /* За да не пречи на кликането под него */
+}
+
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+}
+
+.toast.error {
+    background: rgba(143, 36, 31, 0.95);
+    color: white;
+}
+
+.modal {
+   display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+   background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    padding: 35px;
+    border-radius: 24px;
+    width: 90%;
+    max-width: 450px;
+    position: relative;
+    text-align: center;
+    
+    /* ПРЕМАХНИ margin, top, left и transform от тук! */
+    margin: 0;
+}
+
+.close-modal {
+    position: absolute;
+    right: 20px; top: 15px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #888;
+}
+
+.modal-img {
+    width: 150px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.status-btn {
+    margin-top: 20px;
+    padding: 12px 25px;
+    background-color: #57441f82;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.status-btn:hover {
+    background-color: #3a2e1c;
+}
+
+#stats-bar {
+    display: flex;
+    justify-content: space-around;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #604221; 
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: #555;
+    letter-spacing: 1px;
+}
+
+/* Стил за текста вътре */
+#new-note-text {
+    flex: 1; /* Заема цялото налично място */
+    outline: none;
+    font-family: 'Caveat', cursive; /* Прилагаме Caveat */
+    font-size: 1.25rem; /* Увеличаваме малко размера, защото ръкописните шрифтове често изглеждат по-малки */
+    line-height: 1.2; /* Намаляваме разстоянието между редовете за по-сбит вид */
+    color: #1a1a1a; /* Малко по-тъмен цвят за по-добър контраст върху жълтото */
+    letter-spacing: -0.5px; /* Леко приближаваме буквите за по-естествен вид */
+    overflow-y: auto; /* Скрол, ако текстът стане прекалено дълъг */
+    padding: 10px 0; /* Малко вътрешно разстояние */
+}
+#new-note-text:empty:before {
+    content: attr(placeholder);
+    color: #888;
+}
+
+/* Бутонът вътре в бележката */
+.add-note-inline {
+    align-self: flex-end; /* Отива в долния десен ъгъл */
+    background: #5d4037; /* Цвета на рафта за по-добра кохерентност */
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 6px 15px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.2s ease;
+}
+
+.add-note-inline:hover {
+    background: #3e2723;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Твоите стилове за лепящата бележка (адаптирани за хедър) */
+.sticky-container {
+    width: 220px; /* Уеднаквяваме широчината с .papers вляво */
+    min-height: 180px; /* Правим я достатъчно висока за писане */
+    margin: 0;
+    transition: transform 0.3s ease;
+    transform: rotate(2deg); /* Лек наклон надясно */
+}
+
+.sticky-container:hover {
+    transform: rotate(0deg) scale(1.02); /* Изправя се и се уголемява при посочване */
+}
+
+.sticky {
+    background: #fff9c4; /* Класическо жълто */
+    clip-path: url(#stickyClip);
+    padding: 25px 20px; /* Повече вътрешно разстояние */
+    height: 200px; /* Фиксирана височина за симетрия */
+    display: flex;
+    flex-direction: column;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+}
+.sticky-outer {
+    width: 100%;
+    height: 100%;
+}
+.sticky-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+/*архив с бележки*/
+
+/* Фиксираният бутон */
+#view-archive-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #5d4037; /* Цвят като рафта */
+    border: 3px solid #ffcc00;
+    font-size: 1.8rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    z-index: 1000;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#view-archive-btn:hover {
+    transform: scale(1.1) rotate(-10deg);
+    background: #3e2723;
+}
+
+/* Списъкът с бележки в модала */
+.archive-container {
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh; /* Ограничаваме височината */
+    display: flex;
+    flex-direction: column;
+    background: #fdfcf0; 
+    
+    /* МАХАМЕ top: 50% и transform, защото flexbox-ът на .modal го центрира */
+}
+
+.archive-title {
+    font-family: 'Caveat';
+    font-size: 2.2rem;
+    color: #5d4037;
+    text-align: center;
+    flex-shrink: 0; 
+    margin-bottom: 20px;
+}
+
+
+.archived-note {
+    background: #fff9c4;
+    padding: 15px;
+    margin-bottom: 15px;
+    border-left: 5px solid #ffcc00;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+    position: relative;
+}
+
+.note-content-text {
+    font-family: 'Caveat', cursive;
+    font-size: 1.3rem;
+    color: #333;
+    outline: none;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.note-content-text:hover {
+    background: rgba(0, 0, 0, 0.03);
+    cursor: text;
+}
+
+.note-content-text:focus {
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.1);
+}
+
+.note-date {
+    font-size: 0.7rem;
+    color: #888;
+    display: block;
+    margin-top: 10px;
+    text-align: right;
+}
+
+/* Специално за бутона в архива на бележките */
+.archived-note .delete-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 25px;
+    height: 25px;
+    /*background: #8e2323 !important; /* Наситено червено */
+    color: rgb(147, 40, 40) !important;
+    border-radius: 50%;
+    border: none;
+    display: flex !important; /* Задължително го показваме */
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 1 !important; /* Правим го винаги видим */
+    transition: transform 0.2s;
+    z-index: 10;
+}
+
+.archived-note .delete-btn:hover {
+    transform: scale(1.2);
+    background: #cc0000 !important;
+}
+
+#notes-archive-list {
+    flex-grow: 1; /* Заема цялото налично място под заглавието */
+    overflow-y: auto; /* Пуска скрола само тук */
+    padding-right: 10px; /* Място за скролбара */
+    margin-top: 10px;
+}
+
+/* Красив скролбар (по избор, за Apple/Chrome визия) */
+#notes-archive-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+#notes-archive-list::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+#notes-archive-list::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 10px;
+}

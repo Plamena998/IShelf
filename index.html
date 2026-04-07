@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en"> <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iShelf - smart library</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+    <div class="header-content">
+       <div class="header-left">
+    <div class="papers">
+        <p id="header-quote">"Books are a uniquely portable magic."</p>
+        <small id="quote-author">— Stephen King</small>
+    </div>
+</div>
+        <div class="header-center">
+            <h1><span>i</span>Shelf</h1>
+        </div>
+       <div class="header-right">
+        <div class="header-right">
+  <div class="sticky-container">
+    <div class="sticky-outer">
+      <div class="sticky">
+        <svg width="0" height="0">
+          <defs>
+            <clipPath id="stickyClip" clipPathUnits="objectBoundingBox">
+              <path d="M 0 0 Q 0 0.69, 0.03 0.96 0.03 0.96, 1 0.96 Q 0.96 0.69, 0.96 0 0.96 0, 0 0" stroke-linejoin="round" stroke-linecap="square" />
+            </clipPath>
+          </defs>
+        </svg>
+        <div class="sticky-content">
+          <div id="new-note-text" contenteditable="true" placeholder="Write a note..."></div>
+          <button id="save-note-btn" class="add-note-inline">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    </div>
+</div>
+
+    </div>
+</div>
+    </div>
+    <div class="controls">
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" placeholder="Search your book...">
+            <button id="clearSearchBtn" class="clear-btn">&times;</button>
+        </div>
+    </div>
+</header>
+
+    <main id="library-container">
+        <section id="search-results-section" style="display:none;">
+            <h3>Search Results</h3>
+            <div id="results-grid" class="results-grid"></div>
+        </section>
+        
+        <section id="stats-bar">
+            <div class="stat-item">
+                <span class="stat-value" id="total-books">0</span>
+                <span class="stat-label">Books</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="read-books">0</span>
+                <span class="stat-label">Read</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value" id="progress-percent">0%</span>
+                <span class="stat-label">Progress</span>
+            </div>
+        </section>
+
+        <section id="my-library">
+            <h2>My Library</h2>     
+            <div id="dynamic-shelves-container"></div>
+        </section>
+    </main>
+
+    <div id="book-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+<button id="view-archive-btn" title="My notes">
+    <span class="folder-icon">📂</span>
+</button>
+
+<div id="archive-modal" class="modal">
+    <div class="modal-content archive-container">
+        <span class="close-modal" id="close-archive">&times;</span>
+        <h2 class="archive-title">My notes</h2>
+        <div id="notes-archive-list">
+            </div>
+    </div>
+</div>
+
+    <script src="script.js"></script>
+</body>
+</html>
