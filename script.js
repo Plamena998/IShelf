@@ -1,55 +1,55 @@
 
 const shelf = document.getElementById('main-shelf');
 const searchInput = document.getElementById('searchInput');
-const searchBtn = document.getElementById('searchBtn');
 
 let myPersonalLibrary = JSON.parse(localStorage.getItem('savedBooks')) || [];
 
 renderPersonalShelf();
 
 async function searchBooks() {
-    const query = document.getElementById('searchInput').value.trim();
+    const query = searchInput.value.trim();
     if (!query) return;
 
-    const response = await fetch(`https://openlibrary.org/search.json?q=${query}`);
-    const data = await response.json();
-    const foundBooks = data.docs.slice(0, 5);   
     const resultsGrid = document.getElementById('results-grid');
-
-    resultsGrid.innerHTML = '<p class="loading-text">Searching...</p>';
-
-    fetch(`https://openlibrary.org/search.json?q=${query}&limit=10`)
-        .then(response => response.json())
-        .catch(err => console.error("Error while searching...:", err));
-
-    resultsGrid.style.display = 'flex';
-    resultsGrid.style.justifyContent = 'center';
-    resultsGrid.style.flexWrap = 'wrap'; 
-    resultsGrid.style.gap = '20px';
-
     const resultsSection = document.getElementById('search-results-section');
-    
-    resultsGrid.innerHTML = '';
+
+    // Searching..
+    resultsGrid.innerHTML = '<p class="loading-text">Searching...</p>';
     resultsSection.style.display = 'block';
 
-    foundBooks.forEach(book => {
-        if (book.cover_i) {
-            // 1. Вземаме първия автор от масива или пише "Unknown", ако няма такъв
-        const authorName = book.author_name ? book.author_name[0] : "Unknown Author";
-        
-        // 2. Почистваме имената от кавички, за да не счупят HTML-а
-        const safeTitle = book.title.replace(/'/g, "\\'");
-        const safeAuthor = authorName.replace(/'/g, "\\'");
-            const bookCard = document.createElement('div');
-            bookCard.className = 'search-item';
-            bookCard.innerHTML = `
-            <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-S.jpg" />
-            <p>${book.title}</p>
-            <button onclick="addToMyLibrary('${book.cover_i}', '${safeTitle}', '${safeAuthor}')">Add +</button>
-        `;
-            resultsGrid.appendChild(bookCard);
+    try {
+        const response = await fetch(`https://openlibrary.org/search.json?q=${query}&limit=10`);
+        const data = await response.json();
+        const foundBooks = data.docs;
+
+        resultsGrid.innerHTML = ''; // Изчистваме "Searching..."
+
+        if (foundBooks.length === 0) {
+            resultsGrid.innerHTML = '<p class="no-results">No books found.</p>';
+            return;
         }
-    });
+
+        // 3. Рендерираме резултатите
+        foundBooks.forEach(book => {
+            if (book.cover_i) {
+                const authorName = book.author_name ? book.author_name[0] : "Unknown Author";
+                const safeTitle = book.title.replace(/'/g, "\\'");
+                const safeAuthor = authorName.replace(/'/g, "\\'");
+
+                const bookCard = document.createElement('div');
+                bookCard.className = 'search-item';
+                bookCard.innerHTML = `
+                    <img src="https://covers.openlibrary.org/b/id/${book.cover_i}-S.jpg" alt="cover" />
+                    <p>${book.title}</p>
+                    <button onclick="addToMyLibrary('${book.cover_i}', '${safeTitle}', '${safeAuthor}')">Add +</button>
+                `;
+                resultsGrid.appendChild(bookCard);
+            }
+        });
+    } catch (err) {
+        console.error("Еrror while searching:", err);
+        showToast("Connection error. Try again.", true);
+    }
 }
 
 function addToMyLibrary(coverId, title, author){
@@ -99,23 +99,17 @@ function renderPersonalShelf() {
 
     const booksPerRow = 7;
     
-    // Въртим цикъл през книгите със стъпка 8
     for (let i = 0; i < myPersonalLibrary.length; i += booksPerRow) {
-        // Вземаме "парче" от масива (от i до i+8)
         const currentBatch = myPersonalLibrary.slice(i, i + booksPerRow);
 
-        // 1. Създаваме обвивката на новия рафт
         const shelfDiv = document.createElement('div');
         shelfDiv.className = 'shelf';
-
-        // 2. Създаваме реда за книгите
         const bookRow = document.createElement('div');
         bookRow.className = 'book-row';
 
-        // Пълним реда с книгите от текущото "парче"
         currentBatch.forEach((book) => {
     const bookWrapper = document.createElement('div');
-    bookWrapper.className = 'book-container'; // Обвивка за мащаба
+    bookWrapper.className = 'book-container'; 
 
     bookWrapper.innerHTML = `
     <div class="delete-btn" onclick="event.stopPropagation(); removeFromLibrary('${book.id}')">×</div>
@@ -134,11 +128,9 @@ function renderPersonalShelf() {
 `;
     bookRow.appendChild(bookWrapper);
 });
-        // 3. Създаваме дървената дъска (визуалния елемент)
         const board = document.createElement('div');
         board.className = 'shelf-board';
 
-        // Сглобяваме всичко
         shelfDiv.appendChild(bookRow);
         shelfDiv.appendChild(board);
         container.appendChild(shelfDiv);
@@ -163,7 +155,7 @@ function showToast(message, isError = false) {
 
     toast.classList.add('show');
 
-    // Скрива след 3 сек.
+    // Скриваke 3 сек.
     setTimeout(() => {
         toast.classList.remove('show');
     }, 3000);
@@ -179,7 +171,7 @@ function removeFromLibrary(id) {
     showToast("The book has been removed from the list", true);
 }
 
-// Функция за смяна на статуса (Прочетена/Непрочетена) вътре в модала
+//Прочетена/Непрочетена
 function toggleReadStatus(bookId) {
     const book = myPersonalLibrary.find(b => b.id === bookId);
     if (book) {
@@ -187,26 +179,24 @@ function toggleReadStatus(bookId) {
         saveToLocalStorage();
         renderPersonalShelf();
         
-        // Затваряме модала и показваме съобщение
-        document.getElementById('book-modal').style.display = "flex";
-        showToast(book.isRead ? "Congrats! You read another book!" : "The book is returned in your list.");
+        document.getElementById('book-modal').style.display = "none"; 
+        showToast(book.isRead ? "Congrats! You read another book!" : "Returned to your list.");
     }
 }
 
-// Затваряне на модала при клик извън него (много "smart" функционалност)
+// Затваряне на модала при клик извън него
 window.onclick = function(event) {
     const modal = document.getElementById('book-modal');
     if (event.target == modal) {
-        modal.style.display = "flex";
+        modal.style.display = "none";
     }
 }
 
 function updateStats() {
     const total = myPersonalLibrary.length;
-    // Филтрираме само тези, които имат isRead: true
+    
     const readCount = myPersonalLibrary.filter(book => book.isRead).length;
     
-    // Изчисляваме процента (внимаваме за делене на 0)
     const percent = total > 0 ? Math.round((readCount / total) * 100) : 0;
 
     // Обновяваме текста на екрана
@@ -215,29 +205,21 @@ function updateStats() {
     document.getElementById('progress-percent').innerText = percent + '%';
 }
 
-//live search timer
-
 let debounceTimer;
 
-// Намираме полето за търсене
 const Input = document.getElementById('searchInput');
 
-// Слушаме за всяко пускане на клавиш (keyup)
 Input.addEventListener('input', () => {
-    // 1. Чистим таймера от предишното натискане
     clearTimeout(debounceTimer);
 
-    // 2. Вземаме текста и проверяваме дали не е твърде кратък
     const query = Input.value.trim();
 
-    if (query.length < 3) {
-        // Ако е под 3 символа, не правим нищо (или чистим резултатите)
+    if (query.length < 1) {
         return;
     }
 
-    // 3. Задаваме нов таймер (например 600ms изчакване)
     debounceTimer = setTimeout(() => {
-        searchBooks(query); // Викаме съществуващата ти функция за търсене
+        searchBooks(query);
     }, 600);
 });
 
@@ -245,28 +227,20 @@ const clearSearchBtn = document.getElementById('clearSearchBtn');
 
 if (clearSearchBtn) {
     clearSearchBtn.addEventListener('click', () => {
-        //  Изчистваме текста в полето
         searchInput.value = '';
         
-        //  Скриваме секцията с резултатите
         const resultsSection = document.getElementById('search-results-section');
         const resultsGrid = document.getElementById('results-grid');
         
-        if (resultsSection) resultsSection.style.display = 'flex';
+        if (resultsSection) resultsSection.style.display = 'none';
         if (resultsGrid) resultsGrid.innerHTML = '';
         
-        // Връщаме фокуса върху полето
         searchInput.focus();
     });
 }
 
-
-/*свързване на бутона с бележки - списък */
-
-// 1. Инициализиране на данните
 let notesArchive = JSON.parse(localStorage.getItem('my_notes_list')) || [];
 
-// Елементи
 const saveBtn = document.getElementById('save-note-btn');
 const noteInput = document.getElementById('new-note-text');
 const archiveModal = document.getElementById('archive-modal');
@@ -274,7 +248,6 @@ const archiveList = document.getElementById('notes-archive-list');
 const viewBtn = document.getElementById('view-archive-btn');
 const closeBtn = document.getElementById('close-archive');
 
-// Функция за показване на архива
 function renderArchive() {
     archiveList.innerHTML = ""; 
     
@@ -297,7 +270,6 @@ function renderArchive() {
     });
 }
 
-// Добавяне на нова бележка
 saveBtn.addEventListener('click', () => {
     const text = noteInput.innerText.trim();
     if (text !== "") {
@@ -312,7 +284,6 @@ saveBtn.addEventListener('click', () => {
     }
 });
 
-// Контрол на модала
 viewBtn.onclick = () => {
     renderArchive();
     archiveModal.style.display = "flex";
@@ -320,7 +291,6 @@ viewBtn.onclick = () => {
 
 closeBtn.onclick = () => archiveModal.style.display = "none";
 
-// Изтриване на бележка
 window.deleteNote = function(index) {
         showToast("You successfully deleted the note.", true);
         notesArchive.splice(index, 1);
@@ -330,19 +300,15 @@ window.deleteNote = function(index) {
 }
 
 window.editNote = function(index, newText) {
-    // Проверяваме дали текстът не е празен
     if (newText.trim() === "") {
         showToast("The note could not be empty!", true);
-        renderArchive(); // Връщаме стария текст, ако потребителят изтрие всичко
+        renderArchive(); 
         return;
     }
 
-    // Обновяваме текста в масива
     notesArchive[index].text = newText;
     
-    // Запазваме в LocalStorage
     localStorage.setItem('my_notes_list', JSON.stringify(notesArchive));
     
-    // Показваме Toast съобщение за успех
-    showToast("The change is apply!");
+    showToast("The change is apply!", false);
 };
