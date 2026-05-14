@@ -4,6 +4,7 @@ const searchInput = document.getElementById('searchInput');
 
 let myPersonalLibrary = JSON.parse(localStorage.getItem('savedBooks')) || [];
 
+//OpenLibrary API
 renderPersonalShelf();
 
 async function searchBooks() {
@@ -13,7 +14,7 @@ async function searchBooks() {
     const resultsGrid = document.getElementById('results-grid');
     const resultsSection = document.getElementById('search-results-section');
 
-    // Searching..
+    // Searching
     resultsGrid.innerHTML = '<p class="loading-text">Searching...</p>';
     resultsSection.style.display = 'block';
 
@@ -22,14 +23,14 @@ async function searchBooks() {
         const data = await response.json();
         const foundBooks = data.docs;
 
-        resultsGrid.innerHTML = ''; // Изчистваме "Searching..."
+        resultsGrid.innerHTML = ''; // Изчиства "Searching..."
 
         if (foundBooks.length === 0) {
             resultsGrid.innerHTML = '<p class="no-results">No books found.</p>';
             return;
         }
 
-        // 3. Рендерираме резултатите
+        // Рендерира резултатите
         foundBooks.forEach(book => {
             if (book.cover_i) {
                 const authorName = book.author_name ? book.author_name[0] : "Unknown Author";
@@ -92,10 +93,9 @@ function openModal(bookId) {
 }
 
 };
-
 function renderPersonalShelf() {
     const container = document.getElementById('dynamic-shelves-container');
-    container.innerHTML = ''; // Чистим всичко преди пренареждане
+    container.innerHTML = ''; // Чисти всичко преди пренареждане
 
     const booksPerRow = 7;
     
@@ -155,7 +155,7 @@ function showToast(message, isError = false) {
 
     toast.classList.add('show');
 
-    // Скриваke 3 сек.
+    // Скрива 3 сек.
     setTimeout(() => {
         toast.classList.remove('show');
     }, 3000);
@@ -181,14 +181,6 @@ function toggleReadStatus(bookId) {
         
         document.getElementById('book-modal').style.display = "none"; 
         showToast(book.isRead ? "Congrats! You read another book!" : "Returned to your list.");
-    }
-}
-
-// Затваряне на модала при клик извън него
-window.onclick = function(event) {
-    const modal = document.getElementById('book-modal');
-    if (event.target == modal) {
-        modal.style.display = "none";
     }
 }
 
@@ -238,7 +230,7 @@ if (clearSearchBtn) {
         searchInput.focus();
     });
 }
-
+//----------------------------бележки
 let notesArchive = JSON.parse(localStorage.getItem('my_notes_list')) || [];
 
 const saveBtn = document.getElementById('save-note-btn');
